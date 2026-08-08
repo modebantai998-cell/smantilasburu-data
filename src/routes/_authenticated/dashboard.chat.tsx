@@ -20,7 +20,7 @@ import { CLASSES, ROLE_LABEL } from "@/lib/school";
 import { randomFileName } from "@/lib/storage";
 
 export const Route = createFileRoute("/_authenticated/dashboard/chat")({
-  component: ChatKelas;
+  component: ChatKelas,
 });
 
 type Message = {
