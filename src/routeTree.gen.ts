@@ -16,6 +16,8 @@ import { Route as GaleriRouteImport } from './routes/galeri'
 import { Route as KontakRouteImport } from './routes/kontak'
 import { Route as ProfilRouteImport } from './routes/profil'
 import { Route as AuthenticatedDashboardIndexRouteImport } from './routes/_authenticated/dashboard.index'
+import { Route as AuthenticatedDashboardAkunRouteImport } from './routes/_authenticated/dashboard.akun'
+import { Route as AuthenticatedDashboardBeritaRouteImport } from './routes/_authenticated/dashboard.berita'
 import { Route as AuthenticatedDashboardChatRouteImport } from './routes/_authenticated/dashboard.chat'
 import { Route as AuthenticatedDashboardGaleriRouteImport } from './routes/_authenticated/dashboard.galeri'
 import { Route as AuthenticatedDashboardGuruRouteImport } from './routes/_authenticated/dashboard.guru'
@@ -57,6 +59,18 @@ const AuthenticatedDashboardIndexRoute =
     path: '/dashboard/',
     getParentRoute: () => AuthenticatedRouteRoute,
   } as any)
+const AuthenticatedDashboardAkunRoute =
+  AuthenticatedDashboardAkunRouteImport.update({
+    id: '/dashboard/akun',
+    path: '/dashboard/akun',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
+const AuthenticatedDashboardBeritaRoute =
+  AuthenticatedDashboardBeritaRouteImport.update({
+    id: '/dashboard/berita',
+    path: '/dashboard/berita',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
 const AuthenticatedDashboardChatRoute =
   AuthenticatedDashboardChatRouteImport.update({
     id: '/dashboard/chat',
@@ -94,6 +108,8 @@ export interface FileRoutesByFullPath {
   '/galeri': typeof GaleriRoute
   '/kontak': typeof KontakRoute
   '/profil': typeof ProfilRoute
+  '/dashboard/akun': typeof AuthenticatedDashboardAkunRoute
+  '/dashboard/berita': typeof AuthenticatedDashboardBeritaRoute
   '/dashboard/chat': typeof AuthenticatedDashboardChatRoute
   '/dashboard/galeri': typeof AuthenticatedDashboardGaleriRoute
   '/dashboard/guru': typeof AuthenticatedDashboardGuruRoute
@@ -107,6 +123,8 @@ export interface FileRoutesByTo {
   '/galeri': typeof GaleriRoute
   '/kontak': typeof KontakRoute
   '/profil': typeof ProfilRoute
+  '/dashboard/akun': typeof AuthenticatedDashboardAkunRoute
+  '/dashboard/berita': typeof AuthenticatedDashboardBeritaRoute
   '/dashboard/chat': typeof AuthenticatedDashboardChatRoute
   '/dashboard/galeri': typeof AuthenticatedDashboardGaleriRoute
   '/dashboard/guru': typeof AuthenticatedDashboardGuruRoute
@@ -122,6 +140,8 @@ export interface FileRoutesById {
   '/galeri': typeof GaleriRoute
   '/kontak': typeof KontakRoute
   '/profil': typeof ProfilRoute
+  '/_authenticated/dashboard/akun': typeof AuthenticatedDashboardAkunRoute
+  '/_authenticated/dashboard/berita': typeof AuthenticatedDashboardBeritaRoute
   '/_authenticated/dashboard/chat': typeof AuthenticatedDashboardChatRoute
   '/_authenticated/dashboard/galeri': typeof AuthenticatedDashboardGaleriRoute
   '/_authenticated/dashboard/guru': typeof AuthenticatedDashboardGuruRoute
@@ -137,6 +157,8 @@ export interface FileRouteTypes {
     | '/galeri'
     | '/kontak'
     | '/profil'
+    | '/dashboard/akun'
+    | '/dashboard/berita'
     | '/dashboard/chat'
     | '/dashboard/galeri'
     | '/dashboard/guru'
@@ -150,6 +172,8 @@ export interface FileRouteTypes {
     | '/galeri'
     | '/kontak'
     | '/profil'
+    | '/dashboard/akun'
+    | '/dashboard/berita'
     | '/dashboard/chat'
     | '/dashboard/galeri'
     | '/dashboard/guru'
@@ -164,6 +188,8 @@ export interface FileRouteTypes {
     | '/galeri'
     | '/kontak'
     | '/profil'
+    | '/_authenticated/dashboard/akun'
+    | '/_authenticated/dashboard/berita'
     | '/_authenticated/dashboard/chat'
     | '/_authenticated/dashboard/galeri'
     | '/_authenticated/dashboard/guru'
@@ -232,6 +258,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedDashboardIndexRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/dashboard/akun': {
+      id: '/_authenticated/dashboard/akun'
+      path: '/dashboard/akun'
+      fullPath: '/dashboard/akun'
+      preLoaderRoute: typeof AuthenticatedDashboardAkunRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/dashboard/berita': {
+      id: '/_authenticated/dashboard/berita'
+      path: '/dashboard/berita'
+      fullPath: '/dashboard/berita'
+      preLoaderRoute: typeof AuthenticatedDashboardBeritaRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/dashboard/chat': {
       id: '/_authenticated/dashboard/chat'
       path: '/dashboard/chat'
@@ -271,6 +311,8 @@ declare module '@tanstack/react-router' {
 }
 
 interface AuthenticatedRouteRouteChildren {
+  AuthenticatedDashboardAkunRoute: typeof AuthenticatedDashboardAkunRoute
+  AuthenticatedDashboardBeritaRoute: typeof AuthenticatedDashboardBeritaRoute
   AuthenticatedDashboardChatRoute: typeof AuthenticatedDashboardChatRoute
   AuthenticatedDashboardGaleriRoute: typeof AuthenticatedDashboardGaleriRoute
   AuthenticatedDashboardGuruRoute: typeof AuthenticatedDashboardGuruRoute
@@ -280,6 +322,8 @@ interface AuthenticatedRouteRouteChildren {
 }
 
 const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
+  AuthenticatedDashboardAkunRoute: AuthenticatedDashboardAkunRoute,
+  AuthenticatedDashboardBeritaRoute: AuthenticatedDashboardBeritaRoute,
   AuthenticatedDashboardChatRoute: AuthenticatedDashboardChatRoute,
   AuthenticatedDashboardGaleriRoute: AuthenticatedDashboardGaleriRoute,
   AuthenticatedDashboardGuruRoute: AuthenticatedDashboardGuruRoute,
