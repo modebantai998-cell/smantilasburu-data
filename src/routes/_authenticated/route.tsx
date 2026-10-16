@@ -5,11 +5,14 @@ import {
   Images,
   LayoutDashboard,
   LogOut,
+  Newspaper,
+  ShieldBan,
   MessagesSquare,
   UserCheck,
   Users,
 } from "lucide-react";
 
+import { RecoveryBanner } from "@/components/RecoveryBanner";
 import { Button } from "@/components/ui/button";
 import { useMe } from "@/hooks/useMe";
 import { supabase } from "@/integrations/supabase/client";
@@ -26,7 +29,7 @@ export const Route = createFileRoute("/_authenticated")({
 });
 
 function DashboardShell() {
-  const { profile, isAdmin, isApproved, loading } = useMe();
+  const { profile, isAdmin, isApproved, isBlocked, loading } = useMe();
   const navigate = useNavigate();
   const queryClient = useQueryClient();
 
@@ -40,10 +43,12 @@ function DashboardShell() {
   const links = [
     { to: "/dashboard", label: "Ringkasan", icon: LayoutDashboard, show: true },
     { to: "/dashboard/chat", label: "Chat Kelas", icon: MessagesSquare, show: isApproved },
+    { to: "/dashboard/berita", label: "Berita", icon: Newspaper, show: isApproved },
     { to: "/dashboard/siswa", label: "Data Siswa", icon: Users, show: isApproved },
     { to: "/dashboard/guru", label: "Data Guru", icon: GraduationCap, show: isApproved },
     { to: "/dashboard/persetujuan", label: "Persetujuan", icon: UserCheck, show: isAdmin },
     { to: "/dashboard/galeri", label: "Kelola Galeri", icon: Images, show: isAdmin },
+    { to: "/dashboard/akun", label: "Kelola Akun", icon: ShieldBan, show: isAdmin },
   ] as const;
 
   return (
@@ -62,6 +67,9 @@ function DashboardShell() {
                 {ROLE_LABEL[profile?.role ?? "siswa"]}
                 {profile?.class_name ? ` — ${profile.class_name}` : ""}
               </p>
+              {profile?.member_id ? (
+                <p className="font-mono text-[11px] font-bold">{profile.member_id}</p>
+              ) : null}
             </div>
             <Button variant="onDark" size="sm" onClick={handleSignOut}>
               <LogOut />
@@ -89,7 +97,9 @@ function DashboardShell() {
             ))}
         </nav>
 
-        {!loading && profile && !isApproved ? (
+        {!loading && profile && isBlocked ? <RecoveryBanner memberId={profile.member_id} userId={profile.id} /> : null}
+
+        {!loading && profile && !isApproved && !isBlocked ? (
           <p className="mt-5 rounded-xl border border-accent/50 bg-accent/15 p-4 text-sm font-extrabold uppercase leading-relaxed tracking-wide text-foreground">
             Status akun: {STATUS_LABEL[profile.status]}. Akses data dan chat kelas terbuka setelah
             admin menyetujui akun Anda.

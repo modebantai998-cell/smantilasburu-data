@@ -16,6 +16,8 @@ export type Profile = {
   phone: string | null;
   address: string | null;
   avatar_url: string | null;
+  blocked: boolean;
+  member_id: string | null;
   created_at: string;
 };
 
@@ -71,7 +73,8 @@ export function useMe() {
     loading: !ready || (Boolean(userId) && query.isLoading),
     isAdmin: profile?.role === "admin",
     isGuru: profile?.role === "guru",
-    isApproved: profile?.status === "approved",
+    isApproved: profile?.status === "approved" && !profile?.blocked,
+    isBlocked: Boolean(profile?.blocked),
     refetch: query.refetch,
   };
 }

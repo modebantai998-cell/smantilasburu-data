@@ -68,16 +68,50 @@ export type Database = {
         }
         Relationships: []
       }
+      news: {
+        Row: {
+          author_id: string
+          caption: string
+          created_at: string
+          id: string
+          image_url: string | null
+        }
+        Insert: {
+          author_id: string
+          caption: string
+          created_at?: string
+          id?: string
+          image_url?: string | null
+        }
+        Update: {
+          author_id?: string
+          caption?: string
+          created_at?: string
+          id?: string
+          image_url?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "news_author_id_fkey"
+            columns: ["author_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       profiles: {
         Row: {
           address: string | null
           avatar_url: string | null
+          blocked: boolean
           class_name: string | null
           created_at: string
           full_name: string
           gender: string | null
           id: string
           id_number: string | null
+          member_id: string | null
           phone: string | null
           role: Database["public"]["Enums"]["app_role"]
           status: Database["public"]["Enums"]["approval_status"]
@@ -88,12 +122,14 @@ export type Database = {
         Insert: {
           address?: string | null
           avatar_url?: string | null
+          blocked?: boolean
           class_name?: string | null
           created_at?: string
           full_name: string
           gender?: string | null
           id: string
           id_number?: string | null
+          member_id?: string | null
           phone?: string | null
           role?: Database["public"]["Enums"]["app_role"]
           status?: Database["public"]["Enums"]["approval_status"]
@@ -104,12 +140,14 @@ export type Database = {
         Update: {
           address?: string | null
           avatar_url?: string | null
+          blocked?: boolean
           class_name?: string | null
           created_at?: string
           full_name?: string
           gender?: string | null
           id?: string
           id_number?: string | null
+          member_id?: string | null
           phone?: string | null
           role?: Database["public"]["Enums"]["app_role"]
           status?: Database["public"]["Enums"]["approval_status"]
@@ -118,6 +156,32 @@ export type Database = {
           username?: string
         }
         Relationships: []
+      }
+      recovery_requests: {
+        Row: {
+          created_at: string
+          id: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "recovery_requests_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: true
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       user_roles: {
         Row: {
