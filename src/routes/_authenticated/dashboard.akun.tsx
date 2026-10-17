@@ -35,9 +35,9 @@ function KelolaAkun() {
   const refresh = () => queryClient.invalidateQueries({ queryKey: ["admin-akun"] });
 
   async function setBlocked(id: string, blocked: boolean) {
-    if (id === userId) return toast.error("Admin tidak bisa memblokir diri sendiri.");
+    if (id === userId) { toast.error("Admin tidak bisa memblokir diri sendiri."); return; }
     const { error } = await supabase.from("profiles").update({ blocked }).eq("id", id);
-    if (error) return toast.error("Gagal mengubah status.");
+    if (error) { toast.error("Gagal mengubah status."); return; }
     if (!blocked) await supabase.from("recovery_requests").delete().eq("user_id", id);
     toast.success(blocked ? "Akun diblokir." : "Akun dipulihkan.");
     refresh();

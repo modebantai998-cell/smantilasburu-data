@@ -52,20 +52,20 @@ function BeritaPage() {
     : undefined;
 
   async function post() {
-    if (!caption.trim() || !userId) return toast.error("Tulis berita terlebih dahulu.");
+    if (!caption.trim() || !userId) { toast.error("Tulis berita terlebih dahulu."); return; }
     setBusy(true);
     try {
       let imagePath: string | null = null;
       if (file) {
         const path = `${userId}/${randomFileName(file.name)}`;
         const { error } = await supabase.storage.from("chat-images").upload(path, file);
-        if (error) return toast.error("Gambar gagal diunggah.");
+        if (error) { toast.error("Gambar gagal diunggah."); return; }
         imagePath = path;
       }
       const { error } = await supabase
         .from("news")
         .insert({ author_id: userId, caption: caption.trim(), image_url: imagePath });
-      if (error) return toast.error("Berita gagal diposting.");
+      if (error) { toast.error("Berita gagal diposting."); return; }
       setCaption("");
       setFile(null);
       toast.success("Berita diposting.");
