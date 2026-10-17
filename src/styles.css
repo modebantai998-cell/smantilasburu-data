@@ -208,3 +208,52 @@
 @utility shadow-strong {
   box-shadow: var(--shadow-strong);
 }
+
+@utility marquee-run {
+  display: inline-block;
+  white-space: nowrap;
+  padding-left: 100%;
+  animation: marquee-scroll var(--marquee-speed, 20s) linear infinite;
+}
+
+@utility marquee-rainbow-text {
+  display: inline-block;
+  white-space: nowrap;
+  padding-left: 100%;
+  background-image: linear-gradient(
+    90deg,
+    #ff0000,
+    #ff8800,
+    #ffff00,
+    #00ff00,
+    #00ffff,
+    #0066ff,
+    #ff00ff,
+    #ff0000
+  );
+  background-size: 200% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  animation:
+    marquee-scroll var(--marquee-speed, 20s) linear infinite,
+    marquee-rainbow 4s linear infinite;
+}
+
+@keyframes marquee-scroll {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-100%);
+  }
+}
+
+@keyframes marquee-rainbow {
+  from {
+    background-position: 0% 50%;
+  }
+  to {
+    background-position: -200% 50%;
+  }
+}

@@ -1,5 +1,6 @@
 import { Link, createFileRoute } from "@tanstack/react-router";
 import { BookOpenCheck, GraduationCap, MessagesSquare, ShieldCheck, Users } from "lucide-react";
+import { useEffect, useState } from "react";
 
 import heroAsset from "@/assets/sekolah-1.jpg.asset.json";
 import { SiteFooter } from "@/components/SiteFooter";
@@ -7,7 +8,9 @@ import { SiteHeader } from "@/components/SiteHeader";
 import { StoredImage } from "@/components/StoredImage";
 import { Button } from "@/components/ui/button";
 import { useGallery } from "@/hooks/useGallery";
+import { useSiteSettings } from "@/hooks/useSiteSettings";
 import { SCHOOL_NAME, SCHOOL_TAGLINE } from "@/lib/school";
+import { resolveImageSrc } from "@/lib/storage";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -53,6 +56,24 @@ const KEUNGGULAN = [
 
 function Beranda() {
   const { data: gallery } = useGallery(6);
+  const { data: settings } = useSiteSettings();
+  const hero = settings?.hero;
+
+  const [heroSrc, setHeroSrc] = useState<string>(heroAsset.url);
+
+  useEffect(() => {
+    let active = true;
+    if (hero?.image) {
+      resolveImageSrc("school-images", hero.image).then((src) => {
+        if (active && src) setHeroSrc(src);
+      });
+    } else {
+      setHeroSrc(heroAsset.url);
+    }
+    return () => {
+      active = false;
+    };
+  }, [hero?.image]);
 
   return (
     <div className="min-h-screen bg-background">
@@ -60,7 +81,7 @@ function Beranda() {
 
       <section className="relative overflow-hidden bg-hero-gradient text-primary-foreground">
         <img
-          src={heroAsset.url}
+          src={heroSrc}
           alt={`Gedung ${SCHOOL_NAME}`}
           width={1600}
           height={912}
@@ -71,14 +92,14 @@ function Beranda() {
             Kabupaten Buru — Maluku
           </span>
           <h1 className="mt-5 text-display text-4xl uppercase sm:text-6xl lg:text-7xl">
-            {SCHOOL_NAME}
+            {hero?.title || SCHOOL_NAME}
           </h1>
           <p className="mt-4 max-w-2xl text-lg font-extrabold uppercase tracking-wide text-accent sm:text-2xl">
-            {SCHOOL_TAGLINE}
+            {hero?.tagline || SCHOOL_TAGLINE}
           </p>
           <p className="mt-4 max-w-2xl text-base font-semibold leading-relaxed text-primary-foreground/85 sm:text-lg">
-            Sekolah menengah atas negeri yang membangun generasi cerdas, jujur, dan siap bersaing.
-            Semua informasi sekolah, data siswa, data guru, dan komunikasi kelas ada di satu tempat.
+            {hero?.description ||
+              "Sekolah menengah atas negeri yang membangun generasi cerdas, jujur, dan siap bersaing. Semua informasi sekolah, data siswa, data guru, dan komunikasi kelas ada di satu tempat."}
           </p>
           <div className="mt-8 flex flex-wrap gap-3">
             <Button asChild size="lg" variant="hero">

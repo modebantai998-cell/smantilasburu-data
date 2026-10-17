@@ -2,6 +2,7 @@ import { Link } from "@tanstack/react-router";
 import { GraduationCap, Menu, X } from "lucide-react";
 import { useState } from "react";
 
+import { MarqueeBar } from "@/components/MarqueeBar";
 import { Button } from "@/components/ui/button";
 import { useMe } from "@/hooks/useMe";
 import { SCHOOL_NAME, SCHOOL_SHORT } from "@/lib/school";
@@ -61,6 +62,8 @@ export function SiteHeader() {
           {open ? <X className="size-5" /> : <Menu className="size-5" />}
         </button>
       </div>
+
+      <MarqueeBar />
 
       {open ? (
         <nav className="border-t border-white/10 px-4 pb-3 md:hidden">
