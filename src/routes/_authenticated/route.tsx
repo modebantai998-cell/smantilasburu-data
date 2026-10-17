@@ -6,6 +6,7 @@ import {
   LayoutDashboard,
   LogOut,
   Newspaper,
+  Palette,
   ShieldBan,
   MessagesSquare,
   UserCheck,
@@ -48,6 +49,7 @@ function DashboardShell() {
     { to: "/dashboard/guru", label: "Data Guru", icon: GraduationCap, show: isApproved },
     { to: "/dashboard/persetujuan", label: "Persetujuan", icon: UserCheck, show: isAdmin },
     { to: "/dashboard/galeri", label: "Kelola Galeri", icon: Images, show: isAdmin },
+    { to: "/dashboard/tampilan", label: "Kelola Tampilan", icon: Palette, show: isAdmin },
     { to: "/dashboard/akun", label: "Kelola Akun", icon: ShieldBan, show: isAdmin },
   ] as const;
 
