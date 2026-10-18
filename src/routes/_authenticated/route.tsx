@@ -1,6 +1,7 @@
 import { Link, Outlet, createFileRoute, redirect, useNavigate } from "@tanstack/react-router";
 import { useQueryClient } from "@tanstack/react-query";
 import {
+  Award,
   GraduationCap,
   Images,
   LayoutDashboard,
