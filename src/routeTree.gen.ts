@@ -21,6 +21,7 @@ import { Route as AuthenticatedDashboardBeritaRouteImport } from './routes/_auth
 import { Route as AuthenticatedDashboardChatRouteImport } from './routes/_authenticated/dashboard.chat'
 import { Route as AuthenticatedDashboardGaleriRouteImport } from './routes/_authenticated/dashboard.galeri'
 import { Route as AuthenticatedDashboardGuruRouteImport } from './routes/_authenticated/dashboard.guru'
+import { Route as AuthenticatedDashboardNilaiRouteImport } from './routes/_authenticated/dashboard.nilai'
 import { Route as AuthenticatedDashboardPersetujuanRouteImport } from './routes/_authenticated/dashboard.persetujuan'
 import { Route as AuthenticatedDashboardSiswaRouteImport } from './routes/_authenticated/dashboard.siswa'
 import { Route as AuthenticatedDashboardTampilanRouteImport } from './routes/_authenticated/dashboard.tampilan'
@@ -90,6 +91,12 @@ const AuthenticatedDashboardGuruRoute =
     path: '/dashboard/guru',
     getParentRoute: () => AuthenticatedRouteRoute,
   } as any)
+const AuthenticatedDashboardNilaiRoute =
+  AuthenticatedDashboardNilaiRouteImport.update({
+    id: '/dashboard/nilai',
+    path: '/dashboard/nilai',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
 const AuthenticatedDashboardPersetujuanRoute =
   AuthenticatedDashboardPersetujuanRouteImport.update({
     id: '/dashboard/persetujuan',
@@ -120,6 +127,7 @@ export interface FileRoutesByFullPath {
   '/dashboard/chat': typeof AuthenticatedDashboardChatRoute
   '/dashboard/galeri': typeof AuthenticatedDashboardGaleriRoute
   '/dashboard/guru': typeof AuthenticatedDashboardGuruRoute
+  '/dashboard/nilai': typeof AuthenticatedDashboardNilaiRoute
   '/dashboard/persetujuan': typeof AuthenticatedDashboardPersetujuanRoute
   '/dashboard/siswa': typeof AuthenticatedDashboardSiswaRoute
   '/dashboard/tampilan': typeof AuthenticatedDashboardTampilanRoute
@@ -136,6 +144,7 @@ export interface FileRoutesByTo {
   '/dashboard/chat': typeof AuthenticatedDashboardChatRoute
   '/dashboard/galeri': typeof AuthenticatedDashboardGaleriRoute
   '/dashboard/guru': typeof AuthenticatedDashboardGuruRoute
+  '/dashboard/nilai': typeof AuthenticatedDashboardNilaiRoute
   '/dashboard/persetujuan': typeof AuthenticatedDashboardPersetujuanRoute
   '/dashboard/siswa': typeof AuthenticatedDashboardSiswaRoute
   '/dashboard/tampilan': typeof AuthenticatedDashboardTampilanRoute
@@ -154,6 +163,7 @@ export interface FileRoutesById {
   '/_authenticated/dashboard/chat': typeof AuthenticatedDashboardChatRoute
   '/_authenticated/dashboard/galeri': typeof AuthenticatedDashboardGaleriRoute
   '/_authenticated/dashboard/guru': typeof AuthenticatedDashboardGuruRoute
+  '/_authenticated/dashboard/nilai': typeof AuthenticatedDashboardNilaiRoute
   '/_authenticated/dashboard/persetujuan': typeof AuthenticatedDashboardPersetujuanRoute
   '/_authenticated/dashboard/siswa': typeof AuthenticatedDashboardSiswaRoute
   '/_authenticated/dashboard/tampilan': typeof AuthenticatedDashboardTampilanRoute
@@ -172,6 +182,7 @@ export interface FileRouteTypes {
     | '/dashboard/chat'
     | '/dashboard/galeri'
     | '/dashboard/guru'
+    | '/dashboard/nilai'
     | '/dashboard/persetujuan'
     | '/dashboard/siswa'
     | '/dashboard/tampilan'
@@ -188,6 +199,7 @@ export interface FileRouteTypes {
     | '/dashboard/chat'
     | '/dashboard/galeri'
     | '/dashboard/guru'
+    | '/dashboard/nilai'
     | '/dashboard/persetujuan'
     | '/dashboard/siswa'
     | '/dashboard/tampilan'
@@ -205,6 +217,7 @@ export interface FileRouteTypes {
     | '/_authenticated/dashboard/chat'
     | '/_authenticated/dashboard/galeri'
     | '/_authenticated/dashboard/guru'
+    | '/_authenticated/dashboard/nilai'
     | '/_authenticated/dashboard/persetujuan'
     | '/_authenticated/dashboard/siswa'
     | '/_authenticated/dashboard/tampilan'
@@ -306,6 +319,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedDashboardGuruRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/dashboard/nilai': {
+      id: '/_authenticated/dashboard/nilai'
+      path: '/dashboard/nilai'
+      fullPath: '/dashboard/nilai'
+      preLoaderRoute: typeof AuthenticatedDashboardNilaiRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/dashboard/persetujuan': {
       id: '/_authenticated/dashboard/persetujuan'
       path: '/dashboard/persetujuan'
@@ -336,6 +356,7 @@ interface AuthenticatedRouteRouteChildren {
   AuthenticatedDashboardChatRoute: typeof AuthenticatedDashboardChatRoute
   AuthenticatedDashboardGaleriRoute: typeof AuthenticatedDashboardGaleriRoute
   AuthenticatedDashboardGuruRoute: typeof AuthenticatedDashboardGuruRoute
+  AuthenticatedDashboardNilaiRoute: typeof AuthenticatedDashboardNilaiRoute
   AuthenticatedDashboardPersetujuanRoute: typeof AuthenticatedDashboardPersetujuanRoute
   AuthenticatedDashboardSiswaRoute: typeof AuthenticatedDashboardSiswaRoute
   AuthenticatedDashboardTampilanRoute: typeof AuthenticatedDashboardTampilanRoute
@@ -348,6 +369,7 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedDashboardChatRoute: AuthenticatedDashboardChatRoute,
   AuthenticatedDashboardGaleriRoute: AuthenticatedDashboardGaleriRoute,
   AuthenticatedDashboardGuruRoute: AuthenticatedDashboardGuruRoute,
+  AuthenticatedDashboardNilaiRoute: AuthenticatedDashboardNilaiRoute,
   AuthenticatedDashboardPersetujuanRoute:
     AuthenticatedDashboardPersetujuanRoute,
   AuthenticatedDashboardSiswaRoute: AuthenticatedDashboardSiswaRoute,

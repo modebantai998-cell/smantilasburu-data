@@ -1,6 +1,7 @@
 import { Link, Outlet, createFileRoute, redirect, useNavigate } from "@tanstack/react-router";
 import { useQueryClient } from "@tanstack/react-query";
 import {
+  Award,
   GraduationCap,
   Images,
   LayoutDashboard,
@@ -44,6 +45,7 @@ function DashboardShell() {
   const links = [
     { to: "/dashboard", label: "Ringkasan", icon: LayoutDashboard, show: true },
     { to: "/dashboard/chat", label: "Chat Kelas", icon: MessagesSquare, show: isApproved },
+    { to: "/dashboard/nilai", label: "Nilai", icon: Award, show: isApproved },
     { to: "/dashboard/berita", label: "Berita", icon: Newspaper, show: isApproved },
     { to: "/dashboard/siswa", label: "Data Siswa", icon: Users, show: isApproved },
     { to: "/dashboard/guru", label: "Data Guru", icon: GraduationCap, show: isApproved },

@@ -8,6 +8,13 @@
       "when": 1792173175730,
       "tag": "0000_blokir_pemulihan_berita",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1792292877035,
+      "tag": "0001_create_grades",
+      "breakpoints": true
     }
   ]
 }
