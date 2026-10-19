@@ -15,9 +15,15 @@ export type HeroSettings = {
   description: string;
 };
 
+export type MusicSettings = {
+  audio: string;
+  enabled: boolean;
+};
+
 export type SiteSettings = {
   marquee: MarqueeSettings;
   hero: HeroSettings;
+  music: MusicSettings;
 };
 
 export const DEFAULT_SETTINGS: SiteSettings = {
@@ -31,6 +37,10 @@ export const DEFAULT_SETTINGS: SiteSettings = {
     title: "",
     tagline: "",
     description: "",
+  },
+  music: {
+    audio: "",
+    enabled: true,
   },
 };
 
@@ -56,6 +66,10 @@ export function useSiteSettings() {
         hero: {
           ...DEFAULT_SETTINGS.hero,
           ...(map.get("hero") as Partial<HeroSettings> | undefined),
+        },
+        music: {
+          ...DEFAULT_SETTINGS.music,
+          ...(map.get("music") as Partial<MusicSettings> | undefined),
         },
       };
     },
