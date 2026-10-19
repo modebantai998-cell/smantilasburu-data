@@ -13,3 +13,4 @@
 
 - Homepage editable content (marquee text/color/speed and hero photo/title/tagline/description) lives in the `public.site_settings` table (key/value JSONB), read publicly and written only by admins; the admin UI is `/dashboard/tampilan` and the shared reader is `useSiteSettings`. Keep new editable homepage fields as new keys in that table rather than hardcoding them in routes.
 - Uploaded hero/photo assets go to the private `school-images` bucket; store the object path (not a URL) in the database and resolve it with `resolveImageSrc`.
+- Background music for the homepage is stored in the private `site-audio` bucket with its setting under the `music` key in `public.site_settings` (`{audio, enabled}`); only admins upload or disable it, and the player UI (`BackgroundMusic`) is rendered on the homepage below the marquee.
