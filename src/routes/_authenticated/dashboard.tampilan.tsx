@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { ImageUp, Save, Type } from "lucide-react";
+import { ImageUp, Music, Save, Trash2, Type } from "lucide-react";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
 
@@ -46,6 +46,11 @@ function KelolaTampilan() {
   const [heroFile, setHeroFile] = useState<File | null>(null);
   const [heroImage, setHeroImage] = useState("");
 
+  // Musik latar
+  const [musicFile, setMusicFile] = useState<File | null>(null);
+  const [musicAudio, setMusicAudio] = useState("");
+  const [musicEnabled, setMusicEnabled] = useState(true);
+
   useEffect(() => {
     if (!settings.data) return;
     setMarqueeText(settings.data.marquee.text);
@@ -55,6 +60,8 @@ function KelolaTampilan() {
     setHeroTagline(settings.data.hero.tagline);
     setHeroDescription(settings.data.hero.description);
     setHeroImage(settings.data.hero.image);
+    setMusicAudio(settings.data.music.audio);
+    setMusicEnabled(settings.data.music.enabled);
   }, [settings.data]);
 
   const invalidate = () =>
@@ -125,6 +132,58 @@ function KelolaTampilan() {
     onSuccess: () => {
       toast.success("Tampilan halaman utama dikembalikan ke pengaturan awal.");
       setHeroFile(null);
+      invalidate();
+    },
+    onError: (error: Error) => toast.error(error.message),
+  });
+
+  const saveMusic = useMutation({
+    mutationFn: async () => {
+      let audioPath = musicAudio;
+
+      if (musicFile) {
+        if (musicFile.size > 20 * 1024 * 1024) {
+          throw new Error("Ukuran berkas musik maksimal 20 MB.");
+        }
+        const path = `music/${randomFileName(musicFile.name)}`;
+        const { error: uploadError } = await supabase.storage
+          .from("site-audio")
+          .upload(path, musicFile);
+        if (uploadError) throw new Error("Berkas musik gagal diunggah.");
+        audioPath = path;
+      }
+
+      const { error } = await supabase.from("site_settings").upsert({
+        key: "music",
+        value: {
+          audio: audioPath,
+          enabled: musicEnabled,
+        },
+      });
+      if (error) throw new Error("Pengaturan musik gagal disimpan.");
+    },
+    onSuccess: () => {
+      toast.success("Pengaturan musik disimpan.");
+      setMusicFile(null);
+      invalidate();
+    },
+    onError: (error: Error) => toast.error(error.message),
+  });
+
+  const removeMusic = useMutation({
+    mutationFn: async () => {
+      if (musicAudio) {
+        await supabase.storage.from("site-audio").remove([musicAudio]);
+      }
+      const { error } = await supabase.from("site_settings").upsert({
+        key: "music",
+        value: { audio: "", enabled: true },
+      });
+      if (error) throw new Error("Gagal menghapus musik.");
+    },
+    onSuccess: () => {
+      toast.success("Musik dihapus dari halaman utama.");
+      setMusicFile(null);
       invalidate();
     },
     onError: (error: Error) => toast.error(error.message),
@@ -320,6 +379,75 @@ function KelolaTampilan() {
           >
             Kembalikan Tampilan Awal
           </Button>
+        </div>
+      </section>
+
+      {/* Musik latar */}
+      <section className="space-y-4 rounded-2xl border border-border bg-card p-6 shadow-card">
+        <h2 className="flex items-center gap-2 text-display text-xl uppercase text-primary">
+          <Music className="size-5" strokeWidth={2.4} />
+          Musik Latar
+        </h2>
+        <p className="text-sm font-semibold text-muted-foreground">
+          Unggah berkas musik (tanpa link) untuk diputar otomatis saat pengunjung membuka halaman
+          utama. Papan musik tampil di pojok kanan atas, di bawah teks berjalan. Hanya admin yang
+          bisa mematikan musik.
+        </p>
+
+        <div className="space-y-1.5">
+          <Label htmlFor="music-file" className="uppercase">
+            Unggah Berkas Musik (MP3 / WAV / OGG, maks 20 MB)
+          </Label>
+          <Input
+            id="music-file"
+            type="file"
+            accept="audio/*"
+            onChange={(event) => setMusicFile(event.target.files?.[0] ?? null)}
+          />
+          {musicFile ? (
+            <p className="text-xs font-bold text-muted-foreground">
+              Berkas dipilih: {musicFile.name}
+            </p>
+          ) : musicAudio ? (
+            <p className="text-xs font-bold text-muted-foreground">
+              Musik kustom sudah terpasang di halaman utama.
+            </p>
+          ) : (
+            <p className="text-xs font-bold text-muted-foreground">
+              Belum ada musik terpasang.
+            </p>
+          )}
+        </div>
+
+        <label className="flex items-center gap-2 text-sm font-bold uppercase text-muted-foreground">
+          <input
+            type="checkbox"
+            checked={musicEnabled}
+            onChange={(event) => setMusicEnabled(event.target.checked)}
+            className="size-4 accent-primary"
+          />
+          Putar otomatis di halaman utama
+        </label>
+
+        <div className="flex flex-wrap gap-2">
+          <Button
+            variant="gold"
+            disabled={saveMusic.isPending}
+            onClick={() => saveMusic.mutate()}
+          >
+            <Save />
+            {saveMusic.isPending ? "Menyimpan..." : "Simpan Musik"}
+          </Button>
+          {musicAudio ? (
+            <Button
+              variant="outline"
+              disabled={removeMusic.isPending}
+              onClick={() => removeMusic.mutate()}
+            >
+              <Trash2 />
+              {removeMusic.isPending ? "Menghapus..." : "Hapus Musik"}
+            </Button>
+          ) : null}
         </div>
       </section>
     </div>

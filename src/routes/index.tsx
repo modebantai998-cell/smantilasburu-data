@@ -3,6 +3,7 @@ import { BookOpenCheck, GraduationCap, MessagesSquare, ShieldCheck, Users } from
 import { useEffect, useState } from "react";
 
 import heroAsset from "@/assets/sekolah-1.jpg.asset.json";
+import { BackgroundMusic } from "@/components/BackgroundMusic";
 import { SiteFooter } from "@/components/SiteFooter";
 import { SiteHeader } from "@/components/SiteHeader";
 import { StoredImage } from "@/components/StoredImage";
@@ -78,6 +79,7 @@ function Beranda() {
   return (
     <div className="min-h-screen bg-background">
       <SiteHeader />
+      <BackgroundMusic />
 
       <section className="relative overflow-hidden bg-hero-gradient text-primary-foreground">
         <img
