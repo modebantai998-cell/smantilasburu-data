@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { ImageUp, Save, Type } from "lucide-react";
+import { ImageUp, Music, Save, Trash2, Type } from "lucide-react";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
 
@@ -46,6 +46,11 @@ function KelolaTampilan() {
   const [heroFile, setHeroFile] = useState<File | null>(null);
   const [heroImage, setHeroImage] = useState("");
 
+  // Musik latar
+  const [musicFile, setMusicFile] = useState<File | null>(null);
+  const [musicAudio, setMusicAudio] = useState("");
+  const [musicEnabled, setMusicEnabled] = useState(true);
+
   useEffect(() => {
     if (!settings.data) return;
     setMarqueeText(settings.data.marquee.text);
@@ -55,6 +60,8 @@ function KelolaTampilan() {
     setHeroTagline(settings.data.hero.tagline);
     setHeroDescription(settings.data.hero.description);
     setHeroImage(settings.data.hero.image);
+    setMusicAudio(settings.data.music.audio);
+    setMusicEnabled(settings.data.music.enabled);
   }, [settings.data]);
 
   const invalidate = () =>
