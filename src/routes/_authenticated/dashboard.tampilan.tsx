@@ -137,6 +137,58 @@ function KelolaTampilan() {
     onError: (error: Error) => toast.error(error.message),
   });
 
+  const saveMusic = useMutation({
+    mutationFn: async () => {
+      let audioPath = musicAudio;
+
+      if (musicFile) {
+        if (musicFile.size > 20 * 1024 * 1024) {
+          throw new Error("Ukuran berkas musik maksimal 20 MB.");
+        }
+        const path = `music/${randomFileName(musicFile.name)}`;
+        const { error: uploadError } = await supabase.storage
+          .from("site-audio")
+          .upload(path, musicFile);
+        if (uploadError) throw new Error("Berkas musik gagal diunggah.");
+        audioPath = path;
+      }
+
+      const { error } = await supabase.from("site_settings").upsert({
+        key: "music",
+        value: {
+          audio: audioPath,
+          enabled: musicEnabled,
+        },
+      });
+      if (error) throw new Error("Pengaturan musik gagal disimpan.");
+    },
+    onSuccess: () => {
+      toast.success("Pengaturan musik disimpan.");
+      setMusicFile(null);
+      invalidate();
+    },
+    onError: (error: Error) => toast.error(error.message),
+  });
+
+  const removeMusic = useMutation({
+    mutationFn: async () => {
+      if (musicAudio) {
+        await supabase.storage.from("site-audio").remove([musicAudio]);
+      }
+      const { error } = await supabase.from("site_settings").upsert({
+        key: "music",
+        value: { audio: "", enabled: true },
+      });
+      if (error) throw new Error("Gagal menghapus musik.");
+    },
+    onSuccess: () => {
+      toast.success("Musik dihapus dari halaman utama.");
+      setMusicFile(null);
+      invalidate();
+    },
+    onError: (error: Error) => toast.error(error.message),
+  });
+
   if (!isAdmin) {
     return (
       <p className="rounded-2xl border border-dashed border-border bg-card p-8 text-center text-sm font-bold uppercase tracking-wide text-muted-foreground">
