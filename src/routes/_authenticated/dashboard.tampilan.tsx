@@ -381,6 +381,75 @@ function KelolaTampilan() {
           </Button>
         </div>
       </section>
+
+      {/* Musik latar */}
+      <section className="space-y-4 rounded-2xl border border-border bg-card p-6 shadow-card">
+        <h2 className="flex items-center gap-2 text-display text-xl uppercase text-primary">
+          <Music className="size-5" strokeWidth={2.4} />
+          Musik Latar
+        </h2>
+        <p className="text-sm font-semibold text-muted-foreground">
+          Unggah berkas musik (tanpa link) untuk diputar otomatis saat pengunjung membuka halaman
+          utama. Papan musik tampil di pojok kanan atas, di bawah teks berjalan. Hanya admin yang
+          bisa mematikan musik.
+        </p>
+
+        <div className="space-y-1.5">
+          <Label htmlFor="music-file" className="uppercase">
+            Unggah Berkas Musik (MP3 / WAV / OGG, maks 20 MB)
+          </Label>
+          <Input
+            id="music-file"
+            type="file"
+            accept="audio/*"
+            onChange={(event) => setMusicFile(event.target.files?.[0] ?? null)}
+          />
+          {musicFile ? (
+            <p className="text-xs font-bold text-muted-foreground">
+              Berkas dipilih: {musicFile.name}
+            </p>
+          ) : musicAudio ? (
+            <p className="text-xs font-bold text-muted-foreground">
+              Musik kustom sudah terpasang di halaman utama.
+            </p>
+          ) : (
+            <p className="text-xs font-bold text-muted-foreground">
+              Belum ada musik terpasang.
+            </p>
+          )}
+        </div>
+
+        <label className="flex items-center gap-2 text-sm font-bold uppercase text-muted-foreground">
+          <input
+            type="checkbox"
+            checked={musicEnabled}
+            onChange={(event) => setMusicEnabled(event.target.checked)}
+            className="size-4 accent-primary"
+          />
+          Putar otomatis di halaman utama
+        </label>
+
+        <div className="flex flex-wrap gap-2">
+          <Button
+            variant="gold"
+            disabled={saveMusic.isPending}
+            onClick={() => saveMusic.mutate()}
+          >
+            <Save />
+            {saveMusic.isPending ? "Menyimpan..." : "Simpan Musik"}
+          </Button>
+          {musicAudio ? (
+            <Button
+              variant="outline"
+              disabled={removeMusic.isPending}
+              onClick={() => removeMusic.mutate()}
+            >
+              <Trash2 />
+              {removeMusic.isPending ? "Menghapus..." : "Hapus Musik"}
+            </Button>
+          ) : null}
+        </div>
+      </section>
     </div>
   );
 }
