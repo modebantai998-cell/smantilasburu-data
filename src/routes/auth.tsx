@@ -253,9 +253,8 @@ function RegisterForm({ onDone }: { onDone: () => void }) {
           <Label htmlFor="reg-password" className="uppercase">
             Password
           </Label>
-          <Input
+          <PasswordInput
             id="reg-password"
-            type="password"
             value={password}
             onChange={(event) => setPassword(event.target.value)}
             autoComplete="new-password"
