@@ -6,6 +6,7 @@ import { SiteFooter } from "@/components/SiteFooter";
 import { SiteHeader } from "@/components/SiteHeader";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { PasswordInput } from "@/components/ui/password-input";
 import { Label } from "@/components/ui/label";
 import {
   Select,
@@ -130,9 +131,8 @@ function LoginForm({ onDone }: { onDone: () => void }) {
         <Label htmlFor="login-password" className="uppercase">
           Password
         </Label>
-        <Input
+        <PasswordInput
           id="login-password"
-          type="password"
           value={password}
           onChange={(event) => setPassword(event.target.value)}
           autoComplete="current-password"
@@ -253,9 +253,8 @@ function RegisterForm({ onDone }: { onDone: () => void }) {
           <Label htmlFor="reg-password" className="uppercase">
             Password
           </Label>
-          <Input
+          <PasswordInput
             id="reg-password"
-            type="password"
             value={password}
             onChange={(event) => setPassword(event.target.value)}
             autoComplete="new-password"
