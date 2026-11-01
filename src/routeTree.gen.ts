@@ -23,7 +23,9 @@ import { Route as AuthenticatedDashboardGaleriRouteImport } from './routes/_auth
 import { Route as AuthenticatedDashboardGuruRouteImport } from './routes/_authenticated/dashboard.guru'
 import { Route as AuthenticatedDashboardNilaiRouteImport } from './routes/_authenticated/dashboard.nilai'
 import { Route as AuthenticatedDashboardPersetujuanRouteImport } from './routes/_authenticated/dashboard.persetujuan'
+import { Route as AuthenticatedDashboardProfilRouteImport } from './routes/_authenticated/dashboard.profil'
 import { Route as AuthenticatedDashboardSiswaRouteImport } from './routes/_authenticated/dashboard.siswa'
+import { Route as AuthenticatedDashboardStoryRouteImport } from './routes/_authenticated/dashboard.story'
 import { Route as AuthenticatedDashboardTampilanRouteImport } from './routes/_authenticated/dashboard.tampilan'
 
 const IndexRoute = IndexRouteImport.update({
@@ -103,10 +105,22 @@ const AuthenticatedDashboardPersetujuanRoute =
     path: '/dashboard/persetujuan',
     getParentRoute: () => AuthenticatedRouteRoute,
   } as any)
+const AuthenticatedDashboardProfilRoute =
+  AuthenticatedDashboardProfilRouteImport.update({
+    id: '/dashboard/profil',
+    path: '/dashboard/profil',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
 const AuthenticatedDashboardSiswaRoute =
   AuthenticatedDashboardSiswaRouteImport.update({
     id: '/dashboard/siswa',
     path: '/dashboard/siswa',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
+const AuthenticatedDashboardStoryRoute =
+  AuthenticatedDashboardStoryRouteImport.update({
+    id: '/dashboard/story',
+    path: '/dashboard/story',
     getParentRoute: () => AuthenticatedRouteRoute,
   } as any)
 const AuthenticatedDashboardTampilanRoute =
@@ -129,7 +143,9 @@ export interface FileRoutesByFullPath {
   '/dashboard/guru': typeof AuthenticatedDashboardGuruRoute
   '/dashboard/nilai': typeof AuthenticatedDashboardNilaiRoute
   '/dashboard/persetujuan': typeof AuthenticatedDashboardPersetujuanRoute
+  '/dashboard/profil': typeof AuthenticatedDashboardProfilRoute
   '/dashboard/siswa': typeof AuthenticatedDashboardSiswaRoute
+  '/dashboard/story': typeof AuthenticatedDashboardStoryRoute
   '/dashboard/tampilan': typeof AuthenticatedDashboardTampilanRoute
   '/dashboard/': typeof AuthenticatedDashboardIndexRoute
 }
@@ -146,7 +162,9 @@ export interface FileRoutesByTo {
   '/dashboard/guru': typeof AuthenticatedDashboardGuruRoute
   '/dashboard/nilai': typeof AuthenticatedDashboardNilaiRoute
   '/dashboard/persetujuan': typeof AuthenticatedDashboardPersetujuanRoute
+  '/dashboard/profil': typeof AuthenticatedDashboardProfilRoute
   '/dashboard/siswa': typeof AuthenticatedDashboardSiswaRoute
+  '/dashboard/story': typeof AuthenticatedDashboardStoryRoute
   '/dashboard/tampilan': typeof AuthenticatedDashboardTampilanRoute
   '/dashboard': typeof AuthenticatedDashboardIndexRoute
 }
@@ -165,7 +183,9 @@ export interface FileRoutesById {
   '/_authenticated/dashboard/guru': typeof AuthenticatedDashboardGuruRoute
   '/_authenticated/dashboard/nilai': typeof AuthenticatedDashboardNilaiRoute
   '/_authenticated/dashboard/persetujuan': typeof AuthenticatedDashboardPersetujuanRoute
+  '/_authenticated/dashboard/profil': typeof AuthenticatedDashboardProfilRoute
   '/_authenticated/dashboard/siswa': typeof AuthenticatedDashboardSiswaRoute
+  '/_authenticated/dashboard/story': typeof AuthenticatedDashboardStoryRoute
   '/_authenticated/dashboard/tampilan': typeof AuthenticatedDashboardTampilanRoute
   '/_authenticated/dashboard/': typeof AuthenticatedDashboardIndexRoute
 }
@@ -184,7 +204,9 @@ export interface FileRouteTypes {
     | '/dashboard/guru'
     | '/dashboard/nilai'
     | '/dashboard/persetujuan'
+    | '/dashboard/profil'
     | '/dashboard/siswa'
+    | '/dashboard/story'
     | '/dashboard/tampilan'
     | '/dashboard/'
   fileRoutesByTo: FileRoutesByTo
@@ -201,7 +223,9 @@ export interface FileRouteTypes {
     | '/dashboard/guru'
     | '/dashboard/nilai'
     | '/dashboard/persetujuan'
+    | '/dashboard/profil'
     | '/dashboard/siswa'
+    | '/dashboard/story'
     | '/dashboard/tampilan'
     | '/dashboard'
   id:
@@ -219,7 +243,9 @@ export interface FileRouteTypes {
     | '/_authenticated/dashboard/guru'
     | '/_authenticated/dashboard/nilai'
     | '/_authenticated/dashboard/persetujuan'
+    | '/_authenticated/dashboard/profil'
     | '/_authenticated/dashboard/siswa'
+    | '/_authenticated/dashboard/story'
     | '/_authenticated/dashboard/tampilan'
     | '/_authenticated/dashboard/'
   fileRoutesById: FileRoutesById
@@ -333,11 +359,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedDashboardPersetujuanRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/dashboard/profil': {
+      id: '/_authenticated/dashboard/profil'
+      path: '/dashboard/profil'
+      fullPath: '/dashboard/profil'
+      preLoaderRoute: typeof AuthenticatedDashboardProfilRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/dashboard/siswa': {
       id: '/_authenticated/dashboard/siswa'
       path: '/dashboard/siswa'
       fullPath: '/dashboard/siswa'
       preLoaderRoute: typeof AuthenticatedDashboardSiswaRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/dashboard/story': {
+      id: '/_authenticated/dashboard/story'
+      path: '/dashboard/story'
+      fullPath: '/dashboard/story'
+      preLoaderRoute: typeof AuthenticatedDashboardStoryRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
     '/_authenticated/dashboard/tampilan': {
@@ -358,7 +398,9 @@ interface AuthenticatedRouteRouteChildren {
   AuthenticatedDashboardGuruRoute: typeof AuthenticatedDashboardGuruRoute
   AuthenticatedDashboardNilaiRoute: typeof AuthenticatedDashboardNilaiRoute
   AuthenticatedDashboardPersetujuanRoute: typeof AuthenticatedDashboardPersetujuanRoute
+  AuthenticatedDashboardProfilRoute: typeof AuthenticatedDashboardProfilRoute
   AuthenticatedDashboardSiswaRoute: typeof AuthenticatedDashboardSiswaRoute
+  AuthenticatedDashboardStoryRoute: typeof AuthenticatedDashboardStoryRoute
   AuthenticatedDashboardTampilanRoute: typeof AuthenticatedDashboardTampilanRoute
   AuthenticatedDashboardIndexRoute: typeof AuthenticatedDashboardIndexRoute
 }
@@ -372,7 +414,9 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedDashboardNilaiRoute: AuthenticatedDashboardNilaiRoute,
   AuthenticatedDashboardPersetujuanRoute:
     AuthenticatedDashboardPersetujuanRoute,
+  AuthenticatedDashboardProfilRoute: AuthenticatedDashboardProfilRoute,
   AuthenticatedDashboardSiswaRoute: AuthenticatedDashboardSiswaRoute,
+  AuthenticatedDashboardStoryRoute: AuthenticatedDashboardStoryRoute,
   AuthenticatedDashboardTampilanRoute: AuthenticatedDashboardTampilanRoute,
   AuthenticatedDashboardIndexRoute: AuthenticatedDashboardIndexRoute,
 }
