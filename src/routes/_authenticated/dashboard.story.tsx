@@ -229,6 +229,7 @@ function StoryPage() {
           <div className="mt-3 flex flex-wrap gap-4">
             {grouped.map(([storyUserId, list]) => {
               const first = list[0];
+              if (!first) return null;
               return (
                 <button
                   key={storyUserId}
