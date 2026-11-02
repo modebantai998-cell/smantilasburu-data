@@ -6,10 +6,10 @@ import { useSiteSettings } from "@/hooks/useSiteSettings";
 import { resolveImageSrc } from "@/lib/storage";
 
 /**
- * Musik latar halaman utama.
+ * Musik latar seluruh situs (dirender sekali di root).
  * - Diputar otomatis saat halaman dibuka (browser memblokir autoplay bersuara,
  *   jadi dimulai dalam keadaan senyap lalu dibunyikan pada sentuhan pertama).
- * - Papan musik tampil di pojok kanan atas, di bawah teks berjalan.
+ * - Tetap berputar saat berpindah halaman, termasuk halaman dashboard.
  * - Pengunjung tidak bisa mematikan musik; hanya admin yang punya tombolnya.
  */
 export function BackgroundMusic() {
