@@ -6,11 +6,14 @@ import {
   Images,
   LayoutDashboard,
   LogOut,
+  MessagesSquare,
+  MessageCircle,
   Newspaper,
   Palette,
   ShieldBan,
-  MessagesSquare,
+  Sparkles,
   UserCheck,
+  UserRound,
   Users,
 } from "lucide-react";
 
