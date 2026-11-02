@@ -64,11 +64,13 @@ function ChatKelas() {
     queryKey: ["sender-map"],
     enabled: isApproved,
     queryFn: async () => {
-      const { data, error } = await supabase.from("profiles").select("id, full_name, role");
+      const { data, error } = await supabase
+        .from("profiles")
+        .select("id, full_name, role, avatar_url");
       if (error) throw error;
-      const map: Record<string, { full_name: string; role: string }> = {};
+      const map: Record<string, { full_name: string; role: string; avatar_url: string | null }> = {};
       for (const item of data ?? []) {
-        map[item.id] = { full_name: item.full_name, role: item.role };
+        map[item.id] = { full_name: item.full_name, role: item.role, avatar_url: item.avatar_url };
       }
       return map;
     },

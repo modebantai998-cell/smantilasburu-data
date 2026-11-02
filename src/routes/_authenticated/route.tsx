@@ -69,6 +69,11 @@ function DashboardShell() {
             {SCHOOL_SHORT}
           </Link>
           <div className="flex items-center gap-3">
+            <UserAvatar
+              avatarUrl={profile?.avatar_url ?? null}
+              fullName={profile?.full_name ?? "Pengguna"}
+              className="size-10 border-accent"
+            />
             <div className="text-right">
               <p className="text-sm font-extrabold uppercase leading-tight">
                 {profile?.full_name ?? "Pengguna"}
