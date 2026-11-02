@@ -210,6 +210,7 @@ function ChatKelas() {
                     month: "short",
                   })}
                 </p>
+                </div>
               </div>
             );
           })
