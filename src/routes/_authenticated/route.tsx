@@ -6,15 +6,19 @@ import {
   Images,
   LayoutDashboard,
   LogOut,
+  MessagesSquare,
+  MessageCircle,
   Newspaper,
   Palette,
   ShieldBan,
-  MessagesSquare,
+  Sparkles,
   UserCheck,
+  UserRound,
   Users,
 } from "lucide-react";
 
 import { RecoveryBanner } from "@/components/RecoveryBanner";
+import { UserAvatar } from "@/components/UserAvatar";
 import { Button } from "@/components/ui/button";
 import { useMe } from "@/hooks/useMe";
 import { supabase } from "@/integrations/supabase/client";
@@ -44,7 +48,10 @@ function DashboardShell() {
 
   const links = [
     { to: "/dashboard", label: "Ringkasan", icon: LayoutDashboard, show: true },
+    { to: "/dashboard/profil", label: "Profil Saya", icon: UserRound, show: true },
     { to: "/dashboard/chat", label: "Chat Kelas", icon: MessagesSquare, show: isApproved },
+    { to: "/dashboard/pesan", label: "Pesan Pribadi", icon: MessageCircle, show: isApproved },
+    { to: "/dashboard/story", label: "Story", icon: Sparkles, show: isApproved },
     { to: "/dashboard/nilai", label: "Nilai", icon: Award, show: isApproved },
     { to: "/dashboard/berita", label: "Berita", icon: Newspaper, show: isApproved },
     { to: "/dashboard/siswa", label: "Data Siswa", icon: Users, show: isApproved },
@@ -63,6 +70,11 @@ function DashboardShell() {
             {SCHOOL_SHORT}
           </Link>
           <div className="flex items-center gap-3">
+            <UserAvatar
+              avatarUrl={profile?.avatar_url ?? null}
+              fullName={profile?.full_name ?? "Pengguna"}
+              className="size-10 border-accent"
+            />
             <div className="text-right">
               <p className="text-sm font-extrabold uppercase leading-tight">
                 {profile?.full_name ?? "Pengguna"}

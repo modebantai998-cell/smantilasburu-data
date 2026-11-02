@@ -5,6 +5,7 @@ import { useEffect, useRef, useState } from "react";
 import { toast } from "sonner";
 
 import { StoredImage } from "@/components/StoredImage";
+import { UserAvatar } from "@/components/UserAvatar";
 import { Button } from "@/components/ui/button";
 import {
   Select,
@@ -64,11 +65,13 @@ function ChatKelas() {
     queryKey: ["sender-map"],
     enabled: isApproved,
     queryFn: async () => {
-      const { data, error } = await supabase.from("profiles").select("id, full_name, role");
+      const { data, error } = await supabase
+        .from("profiles")
+        .select("id, full_name, role, avatar_url");
       if (error) throw error;
-      const map: Record<string, { full_name: string; role: string }> = {};
+      const map: Record<string, { full_name: string; role: string; avatar_url: string | null }> = {};
       for (const item of data ?? []) {
-        map[item.id] = { full_name: item.full_name, role: item.role };
+        map[item.id] = { full_name: item.full_name, role: item.role, avatar_url: item.avatar_url };
       }
       return map;
     },
@@ -169,7 +172,16 @@ function ChatKelas() {
             const mine = message.sender_id === userId;
             const sender = senders.data?.[message.sender_id];
             return (
-              <div key={message.id} className={mine ? "self-end text-right" : "self-start"}>
+              <div
+                key={message.id}
+                className={`flex gap-2 ${mine ? "flex-row-reverse self-end text-right" : "self-start"}`}
+              >
+                <UserAvatar
+                  avatarUrl={sender?.avatar_url ?? null}
+                  fullName={sender?.full_name ?? "Pengguna"}
+                  className="size-8 shrink-0"
+                />
+                <div>
                 <p className="text-[11px] font-extrabold uppercase tracking-wide text-muted-foreground">
                   {sender ? sender.full_name : "Pengguna"}
                   {sender ? ` · ${ROLE_LABEL[sender.role]}` : ""}
@@ -199,6 +211,7 @@ function ChatKelas() {
                     month: "short",
                   })}
                 </p>
+                </div>
               </div>
             );
           })

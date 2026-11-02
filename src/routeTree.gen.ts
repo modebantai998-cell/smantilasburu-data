@@ -23,6 +23,7 @@ import { Route as AuthenticatedDashboardGaleriRouteImport } from './routes/_auth
 import { Route as AuthenticatedDashboardGuruRouteImport } from './routes/_authenticated/dashboard.guru'
 import { Route as AuthenticatedDashboardNilaiRouteImport } from './routes/_authenticated/dashboard.nilai'
 import { Route as AuthenticatedDashboardPersetujuanRouteImport } from './routes/_authenticated/dashboard.persetujuan'
+import { Route as AuthenticatedDashboardPesanRouteImport } from './routes/_authenticated/dashboard.pesan'
 import { Route as AuthenticatedDashboardProfilRouteImport } from './routes/_authenticated/dashboard.profil'
 import { Route as AuthenticatedDashboardSiswaRouteImport } from './routes/_authenticated/dashboard.siswa'
 import { Route as AuthenticatedDashboardStoryRouteImport } from './routes/_authenticated/dashboard.story'
@@ -105,6 +106,12 @@ const AuthenticatedDashboardPersetujuanRoute =
     path: '/dashboard/persetujuan',
     getParentRoute: () => AuthenticatedRouteRoute,
   } as any)
+const AuthenticatedDashboardPesanRoute =
+  AuthenticatedDashboardPesanRouteImport.update({
+    id: '/dashboard/pesan',
+    path: '/dashboard/pesan',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
 const AuthenticatedDashboardProfilRoute =
   AuthenticatedDashboardProfilRouteImport.update({
     id: '/dashboard/profil',
@@ -143,6 +150,7 @@ export interface FileRoutesByFullPath {
   '/dashboard/guru': typeof AuthenticatedDashboardGuruRoute
   '/dashboard/nilai': typeof AuthenticatedDashboardNilaiRoute
   '/dashboard/persetujuan': typeof AuthenticatedDashboardPersetujuanRoute
+  '/dashboard/pesan': typeof AuthenticatedDashboardPesanRoute
   '/dashboard/profil': typeof AuthenticatedDashboardProfilRoute
   '/dashboard/siswa': typeof AuthenticatedDashboardSiswaRoute
   '/dashboard/story': typeof AuthenticatedDashboardStoryRoute
@@ -162,6 +170,7 @@ export interface FileRoutesByTo {
   '/dashboard/guru': typeof AuthenticatedDashboardGuruRoute
   '/dashboard/nilai': typeof AuthenticatedDashboardNilaiRoute
   '/dashboard/persetujuan': typeof AuthenticatedDashboardPersetujuanRoute
+  '/dashboard/pesan': typeof AuthenticatedDashboardPesanRoute
   '/dashboard/profil': typeof AuthenticatedDashboardProfilRoute
   '/dashboard/siswa': typeof AuthenticatedDashboardSiswaRoute
   '/dashboard/story': typeof AuthenticatedDashboardStoryRoute
@@ -183,6 +192,7 @@ export interface FileRoutesById {
   '/_authenticated/dashboard/guru': typeof AuthenticatedDashboardGuruRoute
   '/_authenticated/dashboard/nilai': typeof AuthenticatedDashboardNilaiRoute
   '/_authenticated/dashboard/persetujuan': typeof AuthenticatedDashboardPersetujuanRoute
+  '/_authenticated/dashboard/pesan': typeof AuthenticatedDashboardPesanRoute
   '/_authenticated/dashboard/profil': typeof AuthenticatedDashboardProfilRoute
   '/_authenticated/dashboard/siswa': typeof AuthenticatedDashboardSiswaRoute
   '/_authenticated/dashboard/story': typeof AuthenticatedDashboardStoryRoute
@@ -204,6 +214,7 @@ export interface FileRouteTypes {
     | '/dashboard/guru'
     | '/dashboard/nilai'
     | '/dashboard/persetujuan'
+    | '/dashboard/pesan'
     | '/dashboard/profil'
     | '/dashboard/siswa'
     | '/dashboard/story'
@@ -223,6 +234,7 @@ export interface FileRouteTypes {
     | '/dashboard/guru'
     | '/dashboard/nilai'
     | '/dashboard/persetujuan'
+    | '/dashboard/pesan'
     | '/dashboard/profil'
     | '/dashboard/siswa'
     | '/dashboard/story'
@@ -243,6 +255,7 @@ export interface FileRouteTypes {
     | '/_authenticated/dashboard/guru'
     | '/_authenticated/dashboard/nilai'
     | '/_authenticated/dashboard/persetujuan'
+    | '/_authenticated/dashboard/pesan'
     | '/_authenticated/dashboard/profil'
     | '/_authenticated/dashboard/siswa'
     | '/_authenticated/dashboard/story'
@@ -359,6 +372,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedDashboardPersetujuanRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/dashboard/pesan': {
+      id: '/_authenticated/dashboard/pesan'
+      path: '/dashboard/pesan'
+      fullPath: '/dashboard/pesan'
+      preLoaderRoute: typeof AuthenticatedDashboardPesanRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/dashboard/profil': {
       id: '/_authenticated/dashboard/profil'
       path: '/dashboard/profil'
@@ -398,6 +418,7 @@ interface AuthenticatedRouteRouteChildren {
   AuthenticatedDashboardGuruRoute: typeof AuthenticatedDashboardGuruRoute
   AuthenticatedDashboardNilaiRoute: typeof AuthenticatedDashboardNilaiRoute
   AuthenticatedDashboardPersetujuanRoute: typeof AuthenticatedDashboardPersetujuanRoute
+  AuthenticatedDashboardPesanRoute: typeof AuthenticatedDashboardPesanRoute
   AuthenticatedDashboardProfilRoute: typeof AuthenticatedDashboardProfilRoute
   AuthenticatedDashboardSiswaRoute: typeof AuthenticatedDashboardSiswaRoute
   AuthenticatedDashboardStoryRoute: typeof AuthenticatedDashboardStoryRoute
@@ -414,6 +435,7 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedDashboardNilaiRoute: AuthenticatedDashboardNilaiRoute,
   AuthenticatedDashboardPersetujuanRoute:
     AuthenticatedDashboardPersetujuanRoute,
+  AuthenticatedDashboardPesanRoute: AuthenticatedDashboardPesanRoute,
   AuthenticatedDashboardProfilRoute: AuthenticatedDashboardProfilRoute,
   AuthenticatedDashboardSiswaRoute: AuthenticatedDashboardSiswaRoute,
   AuthenticatedDashboardStoryRoute: AuthenticatedDashboardStoryRoute,
