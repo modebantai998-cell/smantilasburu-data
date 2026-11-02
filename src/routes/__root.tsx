@@ -137,6 +137,8 @@ function RootComponent() {
 
   return (
     <QueryClientProvider client={queryClient}>
+      {/* Musik latar: dirender sekali di root agar terus berputar di semua halaman. */}
+      <BackgroundMusic />
       {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
       <Outlet />
       <Toaster position="top-center" richColors />
