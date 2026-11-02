@@ -18,6 +18,7 @@ import {
 } from "lucide-react";
 
 import { RecoveryBanner } from "@/components/RecoveryBanner";
+import { UserAvatar } from "@/components/UserAvatar";
 import { Button } from "@/components/ui/button";
 import { useMe } from "@/hooks/useMe";
 import { supabase } from "@/integrations/supabase/client";
