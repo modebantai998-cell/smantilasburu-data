@@ -171,7 +171,16 @@ function ChatKelas() {
             const mine = message.sender_id === userId;
             const sender = senders.data?.[message.sender_id];
             return (
-              <div key={message.id} className={mine ? "self-end text-right" : "self-start"}>
+              <div
+                key={message.id}
+                className={`flex gap-2 ${mine ? "flex-row-reverse self-end text-right" : "self-start"}`}
+              >
+                <UserAvatar
+                  avatarUrl={sender?.avatar_url ?? null}
+                  fullName={sender?.full_name ?? "Pengguna"}
+                  className="size-8 shrink-0"
+                />
+                <div>
                 <p className="text-[11px] font-extrabold uppercase tracking-wide text-muted-foreground">
                   {sender ? sender.full_name : "Pengguna"}
                   {sender ? ` · ${ROLE_LABEL[sender.role]}` : ""}
