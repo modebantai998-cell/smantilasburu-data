@@ -47,7 +47,10 @@ function DashboardShell() {
 
   const links = [
     { to: "/dashboard", label: "Ringkasan", icon: LayoutDashboard, show: true },
+    { to: "/dashboard/profil", label: "Profil Saya", icon: UserRound, show: true },
     { to: "/dashboard/chat", label: "Chat Kelas", icon: MessagesSquare, show: isApproved },
+    { to: "/dashboard/pesan", label: "Pesan Pribadi", icon: MessageCircle, show: isApproved },
+    { to: "/dashboard/story", label: "Story", icon: Sparkles, show: isApproved },
     { to: "/dashboard/nilai", label: "Nilai", icon: Award, show: isApproved },
     { to: "/dashboard/berita", label: "Berita", icon: Newspaper, show: isApproved },
     { to: "/dashboard/siswa", label: "Data Siswa", icon: Users, show: isApproved },
