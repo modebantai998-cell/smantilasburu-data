@@ -63,19 +63,19 @@ function DashboardHome() {
       </section>
 
       {isApproved ? (
-        <section className="grid gap-4 sm:grid-cols-3">
+        <section className="grid grid-cols-3 gap-3">
           {cards.map((card) => (
             <article
               key={card.label}
-              className="rounded-2xl border border-border bg-card p-5 shadow-card"
+              className="rounded-2xl border border-border bg-card p-3 shadow-card sm:p-5"
             >
-              <span className="grid size-11 place-items-center rounded-xl bg-secondary text-primary">
-                <card.icon className="size-6" strokeWidth={2.4} />
-              </span>
-              <p className="mt-4 text-[11px] font-extrabold uppercase tracking-[0.15em] text-muted-foreground">
+              <p className="text-center text-[11px] font-extrabold uppercase tracking-[0.15em] text-muted-foreground">
                 {card.label}
               </p>
-              <p className="text-display text-4xl text-primary">{card.value}</p>
+              <p className="mt-2 text-center text-display text-4xl text-foreground sm:text-5xl">{card.value}</p>
+              <span className="mt-2 flex justify-center text-primary">
+                <card.icon className="size-5" strokeWidth={2.4} />
+              </span>
             </article>
           ))}
         </section>
@@ -83,13 +83,13 @@ function DashboardHome() {
 
       <section className="grid gap-4 sm:grid-cols-2">
         {isApproved ? (
-          <article className="rounded-2xl bg-hero-gradient p-6 text-primary-foreground shadow-strong">
-            <MessagesSquare className="size-9 text-accent" strokeWidth={2.4} />
+          <article className="rounded-2xl bg-banner-gradient p-6 text-primary-foreground shadow-glow">
+            <MessagesSquare className="size-9" strokeWidth={2.4} />
             <h2 className="mt-3 text-display text-2xl uppercase">Ruang Chat Kelas</h2>
             <p className="mt-2 text-sm font-semibold text-primary-foreground/85">
               Berdiskusi dan kirim gambar bersama teman kelas serta guru.
             </p>
-            <Button asChild variant="gold" className="mt-4">
+            <Button asChild variant="secondary" className="mt-4">
               <Link to="/dashboard/chat">Buka Chat</Link>
             </Button>
           </article>
