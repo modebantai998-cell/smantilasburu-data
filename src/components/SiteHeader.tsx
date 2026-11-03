@@ -20,7 +20,7 @@ export function SiteHeader() {
   const { userId } = useMe();
 
   return (
-    <header className="sticky top-0 z-50 border-b border-primary-deep/40 bg-primary-deep text-primary-foreground">
+    <header className="sticky top-0 z-50 border-b border-primary-deep/40 bg-primary-deep text-foreground">
       <div className="mx-auto flex max-w-6xl items-center gap-3 px-4 py-3">
         <Link to="/" className="flex min-w-0 items-center gap-2.5">
           <SchoolLogo className="size-10" />
@@ -39,8 +39,8 @@ export function SiteHeader() {
             <Link
               key={item.to}
               to={item.to}
-              className="rounded-lg px-3 py-2 text-sm font-bold uppercase tracking-wide text-primary-foreground/80 transition-colors hover:bg-white/10 hover:text-primary-foreground"
-              activeProps={{ className: "bg-white/15 text-primary-foreground" }}
+              className="rounded-lg px-3 py-2 text-sm font-bold uppercase tracking-wide text-foreground/80 transition-colors hover:bg-white/10 hover:text-foreground"
+              activeProps={{ className: "bg-white/15 text-foreground" }}
               activeOptions={{ exact: item.to === "/" }}
             >
               {item.label}
@@ -71,8 +71,8 @@ export function SiteHeader() {
               key={item.to}
               to={item.to}
               onClick={() => setOpen(false)}
-              className="block rounded-lg px-3 py-2.5 text-sm font-bold uppercase tracking-wide text-primary-foreground/85"
-              activeProps={{ className: "bg-white/15 text-primary-foreground" }}
+              className="block rounded-lg px-3 py-2.5 text-sm font-bold uppercase tracking-wide text-foreground/85"
+              activeProps={{ className: "bg-white/15 text-foreground" }}
               activeOptions={{ exact: item.to === "/" }}
             >
               {item.label}

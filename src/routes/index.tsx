@@ -83,7 +83,7 @@ function Beranda() {
       <SiteHeader />
 
 
-      <section className="relative overflow-hidden bg-hero-gradient text-primary-foreground">
+      <section className="relative overflow-hidden bg-hero-gradient text-foreground">
         <img
           src={heroSrc}
           alt={`Gedung ${SCHOOL_NAME}`}
@@ -101,7 +101,7 @@ function Beranda() {
           <p className="mt-4 max-w-2xl text-lg font-extrabold uppercase tracking-wide text-accent sm:text-2xl">
             {hero?.tagline || SCHOOL_TAGLINE}
           </p>
-          <p className="mt-4 max-w-2xl text-base font-semibold leading-relaxed text-primary-foreground/85 sm:text-lg">
+          <p className="mt-4 max-w-2xl text-base font-semibold leading-relaxed text-foreground/85 sm:text-lg">
             {hero?.description ||
               "Sekolah menengah atas negeri yang membangun generasi cerdas, jujur, dan siap bersaing. Semua informasi sekolah, data siswa, data guru, dan komunikasi kelas ada di satu tempat."}
           </p>
