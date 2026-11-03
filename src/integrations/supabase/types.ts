@@ -14,6 +14,33 @@ export type Database = {
   }
   public: {
     Tables: {
+      banners: {
+        Row: {
+          created_at: string
+          id: string
+          image_url: string
+          sort_order: number
+          subtitle: string | null
+          title: string | null
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          image_url: string
+          sort_order?: number
+          subtitle?: string | null
+          title?: string | null
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          image_url?: string
+          sort_order?: number
+          subtitle?: string | null
+          title?: string | null
+        }
+        Relationships: []
+      }
       direct_messages: {
         Row: {
           body: string | null

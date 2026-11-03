@@ -4,6 +4,7 @@ import { ImageUp, Music, Save, Trash2, Type } from "lucide-react";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
 
+import { AdminBannerManager } from "@/components/AdminBannerManager";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -204,6 +205,8 @@ function KelolaTampilan() {
       <h1 className="text-display text-2xl uppercase text-primary sm:text-3xl">
         Kelola Tampilan
       </h1>
+
+      <AdminBannerManager />
 
       {/* Teks berjalan */}
       <section className="space-y-4 rounded-2xl border border-border bg-card p-6 shadow-card">

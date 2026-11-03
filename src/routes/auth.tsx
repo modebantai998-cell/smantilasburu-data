@@ -50,10 +50,10 @@ function AuthPage() {
     <div className="min-h-screen bg-background">
       <SiteHeader />
 
-      <section className="bg-hero-gradient py-12 text-primary-foreground">
+      <section className="bg-hero-gradient py-12 text-foreground">
         <div className="mx-auto max-w-6xl px-4">
           <h1 className="text-display text-3xl uppercase sm:text-4xl">Portal Akun Sekolah</h1>
-          <p className="mt-2 text-base font-semibold text-primary-foreground/85">
+          <p className="mt-2 text-base font-semibold text-foreground/85">
             {SCHOOL_NAME} — gunakan username dan password Anda.
           </p>
         </div>

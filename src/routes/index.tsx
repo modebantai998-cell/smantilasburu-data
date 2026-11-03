@@ -3,6 +3,7 @@ import { BookOpenCheck, GraduationCap, MessagesSquare, ShieldCheck, Users } from
 import { useEffect, useState } from "react";
 
 import heroAsset from "@/assets/sekolah-1.jpg.asset.json";
+import { BannerCarousel } from "@/components/BannerCarousel";
 import { SiteFooter } from "@/components/SiteFooter";
 import { SiteHeader } from "@/components/SiteHeader";
 import { StoredImage } from "@/components/StoredImage";
@@ -26,6 +27,8 @@ export const Route = createFileRoute("/")({
         property: "og:description",
         content: "Berprestasi, Berkarakter, Berbudaya. Kenali SMA Negeri 13 Buru lebih dekat.",
       },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary_large_image" },
     ],
   }),
   component: Beranda,
@@ -80,7 +83,7 @@ function Beranda() {
       <SiteHeader />
 
 
-      <section className="relative overflow-hidden bg-hero-gradient text-primary-foreground">
+      <section className="relative overflow-hidden bg-hero-gradient text-foreground">
         <img
           src={heroSrc}
           alt={`Gedung ${SCHOOL_NAME}`}
@@ -98,7 +101,7 @@ function Beranda() {
           <p className="mt-4 max-w-2xl text-lg font-extrabold uppercase tracking-wide text-accent sm:text-2xl">
             {hero?.tagline || SCHOOL_TAGLINE}
           </p>
-          <p className="mt-4 max-w-2xl text-base font-semibold leading-relaxed text-primary-foreground/85 sm:text-lg">
+          <p className="mt-4 max-w-2xl text-base font-semibold leading-relaxed text-foreground/85 sm:text-lg">
             {hero?.description ||
               "Sekolah menengah atas negeri yang membangun generasi cerdas, jujur, dan siap bersaing. Semua informasi sekolah, data siswa, data guru, dan komunikasi kelas ada di satu tempat."}
           </p>
@@ -113,7 +116,11 @@ function Beranda() {
         </div>
       </section>
 
-      <section className="mx-auto -mt-8 max-w-6xl px-4">
+      <section className="mx-auto mt-6 max-w-6xl px-4">
+        <BannerCarousel />
+      </section>
+
+      <section className="mx-auto mt-6 max-w-6xl px-4">
         <dl className="grid grid-cols-2 gap-3 rounded-2xl border border-border bg-card p-4 shadow-card sm:grid-cols-4 sm:p-6">
           {[
             { label: "Rombongan Belajar", value: "9" },

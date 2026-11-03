@@ -36,10 +36,10 @@ function KontakPage() {
     <div className="min-h-screen bg-background">
       <SiteHeader />
 
-      <section className="bg-hero-gradient py-14 text-primary-foreground">
+      <section className="bg-hero-gradient py-14 text-foreground">
         <div className="mx-auto max-w-6xl px-4">
           <h1 className="text-display text-4xl uppercase sm:text-5xl">Kontak Sekolah</h1>
-          <p className="mt-3 text-base font-semibold text-primary-foreground/85">
+          <p className="mt-3 text-base font-semibold text-foreground/85">
             Silakan hubungi {SCHOOL_NAME} untuk informasi pendaftaran dan layanan akademik.
           </p>
         </div>

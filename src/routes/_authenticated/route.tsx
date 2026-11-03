@@ -17,6 +17,8 @@ import {
   Users,
 } from "lucide-react";
 
+import { BannerCarousel } from "@/components/BannerCarousel";
+import { SchoolLogo } from "@/components/SchoolLogo";
 import { RecoveryBanner } from "@/components/RecoveryBanner";
 import { UserAvatar } from "@/components/UserAvatar";
 import { Button } from "@/components/ui/button";
@@ -63,23 +65,27 @@ function DashboardShell() {
   ] as const;
 
   return (
-    <div className="min-h-screen bg-secondary/40">
-      <header className="bg-hero-gradient text-primary-foreground">
+    <div className="min-h-screen bg-background">
+      <header className="border-b border-border bg-primary-deep text-foreground">
         <div className="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-3 px-4 py-4">
-          <Link to="/" className="text-display text-xl uppercase">
-            {SCHOOL_SHORT}
+          <Link to="/" className="flex items-center gap-3">
+            <SchoolLogo className="size-12" />
+            <span className="text-display text-xl uppercase leading-none sm:text-2xl">{SCHOOL_SHORT}</span>
           </Link>
+          <span className="hidden rounded-full border border-primary/60 bg-primary/10 px-3 py-1 text-[11px] font-black uppercase tracking-widest text-primary shadow-glow md:inline-block">
+            {profile?.role === "admin" ? "Administrator • Sekolah Admin" : profile?.role === "guru" ? "Guru • Akun Resmi" : "Siswa • SMANTILAS"}
+          </span>
           <div className="flex items-center gap-3">
             <UserAvatar
               avatarUrl={profile?.avatar_url ?? null}
               fullName={profile?.full_name ?? "Pengguna"}
-              className="size-10 border-accent"
+              className="size-10 border-primary"
             />
             <div className="text-right">
               <p className="text-sm font-extrabold uppercase leading-tight">
                 {profile?.full_name ?? "Pengguna"}
               </p>
-              <p className="text-[11px] font-bold uppercase tracking-widest text-accent">
+              <p className="text-[11px] font-bold uppercase tracking-widest text-primary">
                 {ROLE_LABEL[profile?.role ?? "siswa"]}
                 {profile?.class_name ? ` — ${profile.class_name}` : ""}
               </p>
@@ -96,7 +102,8 @@ function DashboardShell() {
       </header>
 
       <div className="mx-auto max-w-6xl px-4 py-6">
-        <nav className="flex flex-wrap gap-2">
+        <BannerCarousel className="mb-5" />
+        <nav className="-mx-4 flex gap-2 overflow-x-auto px-4 pb-2 sm:flex-wrap">
           {links
             .filter((link) => link.show)
             .map((link) => (
@@ -104,8 +111,8 @@ function DashboardShell() {
                 key={link.to}
                 to={link.to}
                 activeOptions={{ exact: link.to === "/dashboard" }}
-                activeProps={{ className: "bg-primary text-primary-foreground border-primary" }}
-                className="inline-flex items-center gap-2 rounded-lg border border-border bg-card px-3 py-2 text-xs font-extrabold uppercase tracking-wide text-foreground transition-colors hover:bg-secondary"
+                activeProps={{ className: "!bg-primary !text-primary-foreground !border-primary shadow-glow" }}
+                className="inline-flex shrink-0 items-center gap-2 rounded-xl border border-border bg-card px-3 py-2 text-xs font-extrabold uppercase tracking-wide text-foreground transition-colors hover:bg-secondary"
               >
                 <link.icon className="size-4" />
                 {link.label}
