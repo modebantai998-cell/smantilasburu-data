@@ -24,14 +24,14 @@ export function AdminBannerManager() {
 
   async function addBanner(e: React.FormEvent) {
     e.preventDefault();
-    if (!file) return toast.error("Pilih gambar banner terlebih dahulu.");
-    if (file.size > 8 * 1024 * 1024) return toast.error("Ukuran gambar maksimal 8 MB.");
+    if (!file) { toast.error("Pilih gambar banner terlebih dahulu."); return; }
+    if (file.size > 8 * 1024 * 1024) { toast.error("Ukuran gambar maksimal 8 MB."); return; }
     setBusy(true);
     const path = `banners/${randomFileName(file.name)}`;
     const up = await supabase.storage.from("school-images").upload(path, file, { contentType: file.type });
     if (up.error) {
       setBusy(false);
-      return toast.error("Gagal mengunggah gambar.");
+      { toast.error("Gagal mengunggah gambar."); return; }
     }
     const { error } = await supabase.from("banners").insert({
       title: title.trim() || null,
@@ -40,7 +40,7 @@ export function AdminBannerManager() {
       sort_order: banners.length,
     });
     setBusy(false);
-    if (error) return toast.error("Gagal menyimpan banner.");
+    if (error) { toast.error("Gagal menyimpan banner."); return; }
     toast.success("Banner ditambahkan.");
     setTitle("");
     setSubtitle("");
@@ -52,7 +52,7 @@ export function AdminBannerManager() {
   async function removeBanner(id: string, path: string) {
     if (!confirm("Hapus banner ini?")) return;
     const { error } = await supabase.from("banners").delete().eq("id", id);
-    if (error) return toast.error("Gagal menghapus banner.");
+    if (error) { toast.error("Gagal menghapus banner."); return; }
     await supabase.storage.from("school-images").remove([path]);
     toast.success("Banner dihapus.");
     refresh();
