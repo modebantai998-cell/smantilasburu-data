@@ -245,7 +245,7 @@ function PesanPribadi() {
 
         {active && activeContact ? (
           <div className="space-y-3">
-            <div className="flex items-center gap-3 rounded-2xl bg-hero-gradient p-3 text-primary-foreground">
+            <div className="flex items-center gap-3 rounded-2xl bg-hero-gradient p-3 text-foreground">
               <UserAvatar
                 avatarUrl={activeContact.avatar_url}
                 fullName={activeContact.full_name}

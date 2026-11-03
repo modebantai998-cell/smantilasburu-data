@@ -86,7 +86,7 @@ function DashboardHome() {
           <article className="rounded-2xl bg-banner-gradient p-6 text-primary-foreground shadow-glow">
             <MessagesSquare className="size-9" strokeWidth={2.4} />
             <h2 className="mt-3 text-display text-2xl uppercase">Ruang Chat Kelas</h2>
-            <p className="mt-2 text-sm font-semibold text-primary-foreground/85">
+            <p className="mt-2 text-sm font-semibold text-foreground/85">
               Berdiskusi dan kirim gambar bersama teman kelas serta guru.
             </p>
             <Button asChild variant="secondary" className="mt-4">
