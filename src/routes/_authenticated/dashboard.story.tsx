@@ -1,18 +1,17 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { ChevronLeft, ChevronRight, Clock, ImagePlus, Trash2, X } from "lucide-react";
+import { ChevronLeft, ChevronRight, Clock, ImagePlus, Play, Trash2, Volume2, VolumeX, X } from "lucide-react";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { toast } from "sonner";
 
-import { StoredImage } from "@/components/StoredImage";
+import { openProfileViewer } from "@/components/ProfileViewer";
 import { UserAvatar } from "@/components/UserAvatar";
 import { Button } from "@/components/ui/button";
-import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { useMe } from "@/hooks/useMe";
 import { supabase } from "@/integrations/supabase/client";
 import { ROLE_LABEL } from "@/lib/school";
-import { randomFileName } from "@/lib/storage";
+import { randomFileName, resolveImageSrc } from "@/lib/storage";
 
 export const Route = createFileRoute("/_authenticated/dashboard/story")({
   component: StoryPage,
@@ -29,6 +28,7 @@ type Story = {
   id: string;
   user_id: string;
   image_url: string;
+  media_type: string;
   caption: string | null;
   created_at: string;
   expires_at: string;
@@ -43,6 +43,46 @@ function remainingLabel(expiresAt: string): string {
   return `Hilang dalam ${hours} jam ${minutes} menit`;
 }
 
+/** Media story: gambar atau video, mengambil tautan aman dari penyimpanan. */
+function StoryMedia({ story }: { story: Story }) {
+  const videoRef = useRef<HTMLVideoElement | null>(null);
+  const { data: src, isLoading } = useQuery({
+    queryKey: ["story-media", story.id],
+    queryFn: () => resolveImageSrc("chat-images", story.image_url),
+    staleTime: 1000 * 60 * 10,
+  });
+
+  useEffect(() => {
+    const video = videoRef.current;
+    if (!video || !src) return;
+    video.play().catch(() => {
+      // Browser menolak suara otomatis — ulangi dalam mode senyap.
+      video.muted = true;
+      video.play().catch(() => undefined);
+    });
+  }, [src, story.id]);
+
+  if (isLoading || !src) {
+    return <div className="size-full animate-pulse bg-neutral-900" />;
+  }
+
+  if (story.media_type === "video") {
+    return (
+      <video
+        ref={videoRef}
+        key={story.id}
+        src={src}
+        autoPlay
+        loop
+        playsInline
+        className="max-h-full max-w-full object-contain"
+      />
+    );
+  }
+
+  return <img src={src} alt="Story" className="max-h-full max-w-full object-contain" />;
+}
+
 function StoryPage() {
   const { profile, userId, isAdmin, isApproved } = useMe();
   const queryClient = useQueryClient();
@@ -50,6 +90,8 @@ function StoryPage() {
   const [preview, setPreview] = useState<string | null>(null);
   const [caption, setCaption] = useState("");
   const fileRef = useRef<HTMLInputElement | null>(null);
+  const [muted, setMuted] = useState(false);
+  const touchStartX = useRef<number | null>(null);
 
   const [viewing, setViewing] = useState<{ userId: string; index: number } | null>(null);
 
@@ -99,16 +141,21 @@ function StoryPage() {
   const upload = useMutation({
     mutationFn: async () => {
       if (!userId) throw new Error("Sesi tidak ditemukan.");
-      if (!file) throw new Error("Pilih gambar untuk story.");
-      if (file.size > 5 * 1024 * 1024) throw new Error("Ukuran gambar maksimal 5 MB.");
+      if (!file) throw new Error("Pilih gambar atau video untuk story.");
+      const isVideo = file.type.startsWith("video/");
+      const isImage = file.type.startsWith("image/");
+      if (!isVideo && !isImage) throw new Error("Berkas harus berupa gambar atau video.");
+      if (isVideo && file.size > 30 * 1024 * 1024) throw new Error("Ukuran video maksimal 30 MB.");
+      if (isImage && file.size > 5 * 1024 * 1024) throw new Error("Ukuran gambar maksimal 5 MB.");
 
       const path = `${userId}/${randomFileName(file.name)}`;
       const { error: uploadError } = await supabase.storage.from("chat-images").upload(path, file);
-      if (uploadError) throw new Error("Gambar gagal diunggah.");
+      if (uploadError) throw new Error("Story gagal diunggah.");
 
       const { error } = await supabase.from("stories").insert({
         user_id: userId,
         image_url: path,
+        media_type: isVideo ? "video" : "image",
         caption: caption.trim() || null,
       });
       if (error) throw new Error("Story gagal dikirim.");
@@ -144,13 +191,25 @@ function StoryPage() {
 
   const viewingList = viewing ? (grouped.find(([id]) => id === viewing.userId)?.[1] ?? []) : [];
   const viewingStory = viewingList[viewing?.index ?? 0] ?? null;
+  const atFirst = (viewing?.index ?? 0) <= 0;
+  const atLast = (viewing?.index ?? 0) >= viewingList.length - 1;
+
+  const goPrev = () => {
+    if (!viewing || atFirst) return;
+    setViewing({ ...viewing, index: viewing.index - 1 });
+  };
+  const goNext = () => {
+    if (!viewing || atLast) return;
+    setViewing({ ...viewing, index: viewing.index + 1 });
+  };
 
   return (
     <div className="space-y-6">
       <div>
         <h1 className="text-display text-2xl uppercase text-primary sm:text-3xl">Story</h1>
         <p className="mt-1 text-sm font-bold uppercase tracking-wide text-muted-foreground">
-          Story hilang otomatis setelah 24 jam, seperti WhatsApp, Facebook, dan Instagram.
+          Unggah gambar atau video. Story hilang otomatis setelah 24 jam, seperti WhatsApp, Facebook,
+          dan Instagram.
         </p>
       </div>
 
@@ -158,7 +217,7 @@ function StoryPage() {
         onSubmit={(event) => {
           event.preventDefault();
           if (!file) {
-            toast.error("Pilih gambar untuk story.");
+            toast.error("Pilih gambar atau video untuk story.");
             return;
           }
           upload.mutate();
@@ -168,11 +227,20 @@ function StoryPage() {
         <h2 className="font-extrabold uppercase">Unggah Story Baru</h2>
         {preview ? (
           <div className="relative mt-3 w-40">
-            <img
-              src={preview}
-              alt="Pratinjau story"
-              className="aspect-[9/16] w-40 rounded-xl border border-border object-cover"
-            />
+            {file?.type.startsWith("video/") ? (
+              <video
+                src={preview}
+                muted
+                controls
+                className="aspect-[9/16] w-40 rounded-xl border border-border object-cover"
+              />
+            ) : (
+              <img
+                src={preview}
+                alt="Pratinjau story"
+                className="aspect-[9/16] w-40 rounded-xl border border-border object-cover"
+              />
+            )}
             <Button
               type="button"
               size="icon"
@@ -189,11 +257,11 @@ function StoryPage() {
         ) : (
           <label className="mt-3 inline-flex cursor-pointer items-center gap-2 rounded-lg border border-dashed border-border px-4 py-3 text-xs font-extrabold uppercase tracking-wide hover:bg-secondary">
             <ImagePlus className="size-4" />
-            Pilih Gambar Story
+            Pilih Gambar / Video Story
             <input
               ref={fileRef}
               type="file"
-              accept="image/*"
+              accept="image/*,video/*"
               className="hidden"
               onChange={(event) => {
                 const selected = event.target.files?.[0] ?? null;
@@ -235,7 +303,7 @@ function StoryPage() {
                   key={storyUserId}
                   type="button"
                   onClick={() => setViewing({ userId: storyUserId, index: 0 })}
-                  className="flex w-20 flex-col items-center gap-2"
+                  className="relative flex w-20 flex-col items-center gap-2"
                 >
                   <span className="grid size-20 place-items-center rounded-full bg-hero-gradient p-[3px]">
                     <UserAvatar
@@ -244,6 +312,11 @@ function StoryPage() {
                       className="size-full border-0"
                     />
                   </span>
+                  {first.media_type === "video" ? (
+                    <span className="absolute right-0 top-0 grid size-6 place-items-center rounded-full bg-primary text-primary-foreground shadow-card">
+                      <Play className="size-3 fill-current" />
+                    </span>
+                  ) : null}
                   <span className="w-full truncate text-center text-[11px] font-extrabold uppercase tracking-wide">
                     {first.profile?.full_name ?? "Pengguna"}
                     <span className="block text-[10px] font-bold text-muted-foreground">
@@ -257,75 +330,143 @@ function StoryPage() {
         )}
       </section>
 
-      <Dialog
-        open={Boolean(viewingStory)}
-        onOpenChange={(open) => {
-          if (!open) setViewing(null);
-        }}
-      >
-        {viewingStory ? (
-          <DialogContent className="max-w-sm p-0 sm:max-w-sm">
-            <DialogTitle className="sr-only">
-              Story {viewingStory.profile?.full_name ?? "Pengguna"}
-            </DialogTitle>
-            <div className="relative">
-              <StoredImage
-                bucket="chat-images"
-                value={viewingStory.image_url}
-                alt="Story"
-                className="max-h-[70vh] w-full rounded-2xl object-contain"
+      {viewingStory && viewing ? (
+        <div
+          className="fixed inset-0 z-[100] flex flex-col bg-black"
+          onTouchStart={(event) => {
+            touchStartX.current = event.touches[0]?.clientX ?? null;
+          }}
+          onTouchEnd={(event) => {
+            const start = touchStartX.current;
+            const end = event.changedTouches[0]?.clientX ?? null;
+            touchStartX.current = null;
+            if (start === null || end === null) return;
+            const delta = end - start;
+            if (delta > 60) goPrev();
+            else if (delta < -60) goNext();
+          }}
+        >
+          {/* Bilah kemajuan story */}
+          <div className="flex gap-1 px-3 pt-3">
+            {viewingList.map((item, index) => (
+              <span
+                key={item.id}
+                className={`h-1 flex-1 rounded-full ${index <= viewing.index ? "bg-white" : "bg-white/30"}`}
               />
-              <div className="space-y-2 p-4">
-                <p className="text-sm font-extrabold uppercase">
-                  {viewingStory.profile?.full_name ?? "Pengguna"}
-                  {viewingStory.profile ? ` · ${ROLE_LABEL[viewingStory.profile.role]}` : ""}
-                  {viewingStory.profile?.class_name ? ` ${viewingStory.profile.class_name}` : ""}
-                </p>
-                {viewingStory.caption ? (
-                  <p className="text-sm font-semibold leading-relaxed">{viewingStory.caption}</p>
-                ) : null}
-                <p className="flex items-center gap-1.5 text-xs font-bold uppercase text-muted-foreground">
-                  <Clock className="size-3.5" />
-                  {remainingLabel(viewingStory.expires_at)}
-                </p>
-              </div>
+            ))}
+          </div>
 
-              <div className="flex items-center justify-between gap-2 border-t border-border p-3">
-                <Button
-                  size="sm"
-                  variant="ghost"
-                  disabled={viewing!.index === 0}
-                  onClick={() => setViewing({ ...viewing!, index: viewing!.index - 1 })}
+          {/* Baris atas: pemilik story + tombol */}
+          <div className="flex items-center justify-between gap-2 px-4 py-3">
+            <button
+              type="button"
+              onClick={() => openProfileViewer(viewingStory.user_id)}
+              className="flex min-w-0 items-center gap-2 text-left"
+            >
+              <UserAvatar
+                avatarUrl={viewingStory.profile?.avatar_url ?? null}
+                fullName={viewingStory.profile?.full_name ?? "Pengguna"}
+                className="size-9 border-white/40"
+              />
+              <span className="min-w-0">
+                <span className="block truncate text-sm font-extrabold uppercase text-white">
+                  {viewingStory.profile?.full_name ?? "Pengguna"}
+                </span>
+                <span className="block text-[10px] font-bold uppercase tracking-wide text-white/70">
+                  {viewingStory.profile ? ROLE_LABEL[viewingStory.profile.role] : ""}
+                </span>
+              </span>
+            </button>
+            <div className="flex items-center gap-2">
+              {viewingStory.media_type === "video" ? (
+                <button
+                  type="button"
+                  aria-label={muted ? "Bunyikan video" : "Senyapkan video"}
+                  onClick={() => setMuted((value) => !value)}
+                  className="grid size-9 place-items-center rounded-full border border-white/40 text-white"
                 >
-                  <ChevronLeft />
-                  Sebelumnya
-                </Button>
-                {(viewingStory.user_id === userId || isAdmin) && (
-                  <Button
-                    size="sm"
-                    variant="destructive"
-                    onClick={() => deleteStory(viewingStory.id)}
-                  >
-                    <Trash2 />
-                    Hapus
-                  </Button>
-                )}
-                <Button
-                  size="sm"
-                  variant="ghost"
-                  disabled={viewing!.index >= viewingList.length - 1}
-                  onClick={() => setViewing({ ...viewing!, index: viewing!.index + 1 })}
+                  {muted ? <VolumeX className="size-4" /> : <Volume2 className="size-4" />}
+                </button>
+              ) : null}
+              {(viewingStory.user_id === userId || isAdmin) ? (
+                <button
+                  type="button"
+                  aria-label="Hapus story"
+                  onClick={() => deleteStory(viewingStory.id)}
+                  className="grid size-9 place-items-center rounded-full border border-white/40 text-white"
                 >
-                  Berikutnya
-                  <ChevronRight />
-                </Button>
+                  <Trash2 className="size-4" />
+                </button>
+              ) : null}
+              <button
+                type="button"
+                aria-label="Tutup story"
+                onClick={() => setViewing(null)}
+                className="grid size-9 place-items-center rounded-full border border-white/40 text-white"
+              >
+                <X className="size-4" />
+              </button>
+            </div>
+          </div>
+
+          {/* Media memenuhi layar */}
+          <div className="relative min-h-0 flex-1">
+            <div className="grid h-full place-items-center">
+              <div className={muted ? "[&_video]:muted" : undefined} data-muted={muted}>
+                <StoryMedia story={viewingStory} />
               </div>
             </div>
-          </DialogContent>
-        ) : null}
-      </Dialog>
 
-      {profile ? null : null}
+            {/* Zona geser kiri / kanan */}
+            <button
+              type="button"
+              aria-label="Story sebelumnya"
+              onClick={goPrev}
+              disabled={atFirst}
+              className="absolute bottom-0 left-0 top-0 w-1/4 disabled:cursor-default"
+            />
+            <button
+              type="button"
+              aria-label="Story berikutnya"
+              onClick={goNext}
+              disabled={atLast}
+              className="absolute bottom-0 right-0 top-0 w-1/4 disabled:cursor-default"
+            />
+
+            <Button
+              size="icon"
+              variant="ghost"
+              onClick={goPrev}
+              disabled={atFirst}
+              aria-label="Sebelumnya"
+              className="absolute left-2 top-1/2 -translate-y-1/2 rounded-full border border-white/40 text-white hover:bg-white/10 disabled:opacity-0"
+            >
+              <ChevronLeft />
+            </Button>
+            <Button
+              size="icon"
+              variant="ghost"
+              onClick={goNext}
+              disabled={atLast}
+              aria-label="Berikutnya"
+              className="absolute right-2 top-1/2 -translate-y-1/2 rounded-full border border-white/40 text-white hover:bg-white/10 disabled:opacity-0"
+            >
+              <ChevronRight />
+            </Button>
+          </div>
+
+          {/* Keterangan di bawah */}
+          <div className="space-y-1 px-4 py-4">
+            {viewingStory.caption ? (
+              <p className="text-sm font-semibold leading-relaxed text-white">{viewingStory.caption}</p>
+            ) : null}
+            <p className="flex items-center gap-1.5 text-xs font-bold uppercase text-white/70">
+              <Clock className="size-3.5" />
+              {remainingLabel(viewingStory.expires_at)}
+            </p>
+          </div>
+        </div>
+      ) : null}
     </div>
   );
 }
